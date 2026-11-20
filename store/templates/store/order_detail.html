@@ -1,0 +1,85 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Order Details #{{ order.id }} - Bazaar{% endblock %}
+
+{% block content %}
+  <div style="margin: 1.5rem 0 1rem 0; font-size: 0.9rem; color: var(--color-text-muted);">
+    <a href="{% url 'home' %}">Home</a> / 
+    <a href="{% url 'orders' %}">My Orders</a> / 
+    <span style="color: var(--color-secondary); font-weight: 600;">Order #{{ order.id }}</span>
+  </div>
+
+  <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); margin-bottom: 3.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border); padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
+      <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--color-secondary);">Order #{{ order.id }}</h1>
+        <div style="font-size: 0.9rem; color: var(--color-text-muted);">Placed on {{ order.created_at|date:"F d, Y at H:i" }}</div>
+      </div>
+      <div>
+        <span class="badge badge-category" style="font-size: 1rem; padding: 0.5rem 1rem;">
+          Status: {{ order.status }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Customer Information Grid -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; background: var(--color-background); padding: 1.25rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+      <div>
+        <h4 style="font-weight: 800; margin-bottom: 0.4rem;"><i class="fa-solid fa-user"></i> Customer Info</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--color-text-muted);">
+          <strong>Name:</strong> {{ order.full_name }}<br>
+          <strong>Email:</strong> {{ order.email }}<br>
+          <strong>Phone:</strong> {{ order.phone }}
+        </p>
+      </div>
+      <div>
+        <h4 style="font-weight: 800; margin-bottom: 0.4rem;"><i class="fa-solid fa-truck-ramp-box"></i> Shipping Address</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--color-text-muted);">
+          {{ order.address }}<br>
+          {{ order.city }}, {{ order.state }} - {{ order.postal_code }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Order Items Breakdown -->
+    <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem;">Purchased Items</h3>
+    <div class="cart-table-wrap" style="margin-bottom: 1.5rem;">
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order_items %}
+            <tr>
+              <td>
+                <div style="font-weight: 700; color: var(--color-secondary);">
+                  {{ item.product_name }}
+                </div>
+              </td>
+              <td>₹{{ item.price }}</td>
+              <td style="font-weight: 700;">{{ item.quantity }}</td>
+              <td style="font-weight: 800; color: var(--color-primary);">₹{{ item.subtotal }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Order Total -->
+    <div style="text-align: right; font-size: 1.3rem; font-weight: 800; color: var(--color-secondary);">
+      Grand Total: <span style="color: var(--color-primary);">₹{{ order.total_amount }}</span>
+    </div>
+
+    <div style="margin-top: 2rem;">
+      <a href="{% url 'orders' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Back to Orders
+      </a>
+    </div>
+  </div>
+{% endblock %}

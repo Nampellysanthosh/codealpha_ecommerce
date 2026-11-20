@@ -1,0 +1,18 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Page Not Found - Bazaar{% endblock %}
+
+{% block content %}
+  <div style="text-align: center; padding: 6rem 1rem; background: white; border-radius: var(--radius-lg); border: 1px solid var(--color-border); margin: 3rem 0;">
+    <div style="font-size: 6rem; font-weight: 800; color: var(--color-primary); line-height: 1;">404</div>
+    <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--color-secondary); margin: 1rem 0 0.5rem 0;">
+      Oops! Page Not Found
+    </h2>
+    <p style="color: var(--color-text-muted); font-size: 1.05rem; max-width: 500px; margin: 0 auto 2rem auto;">
+      The page or product you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+    </p>
+    <a href="{% url 'home' %}" class="btn btn-lg btn-primary">
+      <i class="fa-solid fa-house"></i> Return to Homepage
+    </a>
+  </div>
+{% endblock %}

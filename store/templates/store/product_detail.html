@@ -1,0 +1,89 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - Bazaar{% endblock %}
+
+{% block content %}
+  <!-- Breadcrumb navigation -->
+  <div style="margin: 1.5rem 0 1rem 0; font-size: 0.9rem; color: var(--color-text-muted);">
+    <a href="{% url 'home' %}">Home</a> / 
+    <a href="{% url 'category' product.category %}">{{ product.category }}</a> / 
+    <span style="color: var(--color-secondary); font-weight: 600;">{{ product.name }}</span>
+  </div>
+
+  <!-- Product Detail Section -->
+  <div class="product-detail-layout">
+    <div class="product-gallery-main">
+      <img src="{{ product.get_image_url }}" alt="{{ product.name }}" onerror="this.src='{% static 'store/images/placeholder.svg' %}';">
+    </div>
+
+    <div class="product-info-col">
+      <div style="margin-bottom: 0.5rem;">
+        <span class="badge badge-category">{{ product.category }}</span>
+        {% if product.is_in_stock %}
+          <span class="badge badge-in-stock"><i class="fa-solid fa-circle-check"></i> In Stock ({{ product.stock }} available)</span>
+        {% else %}
+          <span class="badge badge-out-stock"><i class="fa-solid fa-circle-xmark"></i> Sold Out</span>
+        {% endif %}
+      </div>
+
+      <h1 class="product-detail-title">{{ product.name }}</h1>
+      <div class="product-detail-price">₹{{ product.price }}</div>
+
+      <p class="product-detail-desc">{{ product.description }}</p>
+
+      {% if product.is_in_stock %}
+        <form action="{% url 'cart_add' product.id %}" method="POST">
+          {% csrf_token %}
+          <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">Select Quantity:</label>
+          <div class="qty-control-group">
+            <button type="button" class="qty-btn btn-dec">-</button>
+            <input type="number" name="quantity" class="qty-input" value="1" min="1" max="{{ product.stock }}">
+            <button type="button" class="qty-btn btn-inc">+</button>
+          </div>
+
+          <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button type="submit" class="btn btn-lg btn-primary flex-grow-1">
+              <i class="fa-solid fa-cart-plus"></i> Add to Cart
+            </button>
+            <a href="{% url 'home' %}" class="btn btn-lg btn-secondary">
+              <i class="fa-solid fa-arrow-left"></i> Back to Shop
+            </a>
+          </div>
+        </form>
+      {% else %}
+        <div style="background: #fee2e2; color: #b91c1c; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem;">
+          <i class="fa-solid fa-triangle-exclamation"></i> This product is currently out of stock. Please check back later.
+        </div>
+        <a href="{% url 'home' %}" class="btn btn-secondary">
+          <i class="fa-solid fa-arrow-left"></i> Back to Shop
+        </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Related Products Section -->
+  {% if related_products %}
+    <div style="margin-bottom: 3.5rem;">
+      <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 800;">You Might Also Like</h2>
+      <div class="product-grid">
+        {% for rel in related_products %}
+          <div class="product-card">
+            <div class="product-image-wrap">
+              <a href="{% url 'product_detail' rel.id %}">
+                <img src="{{ rel.get_image_url }}" alt="{{ rel.name }}" onerror="this.src='{% static 'store/images/placeholder.svg' %}';">
+              </a>
+            </div>
+            <div class="product-card-body">
+              <h4 class="product-title"><a href="{% url 'product_detail' rel.id %}">{{ rel.name }}</a></h4>
+              <div class="product-card-footer">
+                <div class="product-price">₹{{ rel.price }}</div>
+                <a href="{% url 'product_detail' rel.id %}" class="btn btn-sm btn-secondary">View</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Bazaar - Premier E-Commerce Shopping Cart{% endblock %}</title>
+  
+  <!-- FontAwesome Icons for clean badges & UI -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="{% static 'store/images/placeholder.svg' %}" type="image/svg+xml">
+  
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="{% url 'home' %}" class="brand-logo">
+        <span class="logo-badge"><i class="fa-solid fa-bag-shopping"></i></span>
+        bazaar
+      </a>
+
+      <form action="{% url 'search' %}" method="GET" class="nav-search">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" name="q" placeholder="Search products, brands, categories..." value="{{ search_query|default:'' }}">
+      </form>
+
+      <ul class="nav-menu" id="navMenu">
+        <li>
+          <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' and not selected_category and not search_query %}active{% endif %}">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'products' %}" class="nav-link {% if request.resolver_match.url_name == 'products' %}active{% endif %}">
+            Products
+          </a>
+        </li>
+
+        {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'orders' %}" class="nav-link {% if request.resolver_match.url_name == 'orders' %}active{% endif %}">
+              <i class="fa-solid fa-box"></i> My Orders
+            </a>
+          </li>
+          <li class="user-nav-dropdown">
+            <span class="user-tag">
+              <i class="fa-solid fa-user-circle"></i> Hi, {{ user.username }}
+            </span>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-secondary" title="Logout">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
+          </li>
+        {% else %}
+          <li>
+            <a href="{% url 'login' %}" class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+              Login
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'register' %}" class="btn btn-sm btn-primary">
+              Register
+            </a>
+          </li>
+        {% endif %}
+
+        <li>
+          <a href="{% url 'cart' %}" class="cart-icon-btn">
+            <i class="fa-solid fa-cart-shopping"></i>
+            Cart
+            <span class="cart-badge">{{ cart_total_count|default:0 }}</span>
+          </a>
+        </li>
+      </ul>
+
+      <button class="mobile-toggle" id="mobileNavToggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Flash System Messages -->
+  <div class="container">
+    {% if messages %}
+      <div class="messages-container">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+            <span>
+              {% if message.tags == 'success' %}<i class="fa-solid fa-circle-check"></i>
+              {% elif message.tags == 'error' or message.tags == 'danger' %}<i class="fa-solid fa-triangle-exclamation"></i>
+              {% elif message.tags == 'warning' %}<i class="fa-solid fa-circle-exclamation"></i>
+              {% else %}<i class="fa-solid fa-circle-info"></i>{% endif %}
+              {{ message }}
+            </span>
+            <button style="background:none; border:none; color:inherit; cursor:pointer;" onclick="this.parentElement.remove()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Main Content Block -->
+  <main class="container flex-grow-1">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3><i class="fa-solid fa-bag-shopping"></i> bazaar</h3>
+          <p>Your one-stop destination for quality electronics, modern fashion, footwear, home essentials, and lifestyle accessories.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Categories</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'category' 'Electronics' %}">Electronics</a></li>
+            <li><a href="{% url 'category' 'Fashion' %}">Fashion</a></li>
+            <li><a href="{% url 'category' 'Shoes' %}">Shoes</a></li>
+            <li><a href="{% url 'category' 'Accessories' %}">Accessories</a></li>
+            <li><a href="{% url 'category' 'Home' %}">Home</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'products' %}">All Products</a></li>
+            <li><a href="{% url 'cart' %}">Shopping Cart</a></li>
+            <li><a href="{% url 'orders' %}">My Orders</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Customer Care</h4>
+          <ul class="footer-links">
+            <li><a href="#">Secure Checkout</a></li>
+            <li><a href="#">Shipping Information</a></li>
+            <li><a href="#">24/7 Support</a></li>
+            <li><a href="/admin/" target="_blank">Admin Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Bazaar E-Commerce Inc. All Rights Reserved. </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Master JavaScript Script -->
+  <script src="{% static 'store/js/script.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

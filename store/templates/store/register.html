@@ -1,0 +1,51 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Create Account - Bazaar{% endblock %}
+
+{% block content %}
+  <div class="auth-wrapper">
+    <div class="auth-header">
+      <h2>Create Your Account</h2>
+      <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Join Bazaar for fast checkout and order tracking.</p>
+    </div>
+
+    <form action="{% url 'register' %}" method="POST">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Username *</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div style="color: var(--color-danger); font-size: 0.85rem;">{{ form.username.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.email.id_for_label }}">Email Address *</label>
+        {{ form.email }}
+        {% if form.email.errors %}<div style="color: var(--color-danger); font-size: 0.85rem;">{{ form.email.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">Password *</label>
+        {{ form.password }}
+        {% if form.password.errors %}<div style="color: var(--color-danger); font-size: 0.85rem;">{{ form.password.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.confirm_password.id_for_label }}">Confirm Password *</label>
+        {{ form.confirm_password }}
+        {% if form.confirm_password.errors %}<div style="color: var(--color-danger); font-size: 0.85rem;">{{ form.confirm_password.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">
+          <i class="fa-solid fa-user-plus"></i> Register Account
+        </button>
+      </div>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--color-text-muted);">
+      Already have an account? 
+      <a href="{% url 'login' %}" style="color: var(--color-primary); font-weight: 700;">Sign in here</a>
+    </div>
+  </div>
+{% endblock %}

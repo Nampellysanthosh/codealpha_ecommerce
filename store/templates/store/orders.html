@@ -1,0 +1,54 @@
+{% extends 'store/base.html' %}
+
+{% block title %}My Orders - Bazaar{% endblock %}
+
+{% block content %}
+  <h1 style="margin: 2rem 0 1.5rem 0; font-size: 2rem; font-weight: 800;">My Order History</h1>
+
+  {% if orders %}
+    <div class="cart-table-wrap" style="margin-bottom: 4rem;">
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Total Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr>
+              <td style="font-weight: 800; color: var(--color-secondary);">#{{ order.id }}</td>
+              <td>{{ order.created_at|date:"M d, Y - H:i" }}</td>
+              <td style="font-weight: 800; color: var(--color-primary);">₹{{ order.total_amount }}</td>
+              <td>
+                {% if order.status == 'Delivered' %}
+                  <span class="badge badge-in-stock"><i class="fa-solid fa-check"></i> Delivered</span>
+                {% elif order.status == 'Cancelled' %}
+                  <span class="badge badge-out-stock"><i class="fa-solid fa-xmark"></i> Cancelled</span>
+                {% else %}
+                  <span class="badge badge-category"><i class="fa-solid fa-clock"></i> {{ order.status }}</span>
+                {% endif %}
+              </td>
+              <td>
+                <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-secondary">
+                  <i class="fa-solid fa-eye"></i> View Order
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <!-- Empty Orders Layout -->
+    <div style="text-align: center; padding: 4rem 1rem; background: white; border-radius: var(--radius-lg); border: 1px solid var(--color-border); margin: 2rem 0 4rem 0;">
+      <i class="fa-solid fa-receipt" style="font-size: 3.5rem; color: var(--color-text-muted); margin-bottom: 1rem;"></i>
+      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem;">No Past Orders Found</h2>
+      <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">You haven't placed any orders with us yet.</p>
+      <a href="{% url 'home' %}" class="btn btn-primary">Start Shopping</a>
+    </div>
+  {% endif %}
+{% endblock %}

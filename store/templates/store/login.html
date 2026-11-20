@@ -1,0 +1,37 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Sign In - Bazaar{% endblock %}
+
+{% block content %}
+  <div class="auth-wrapper">
+    <div class="auth-header">
+      <h2>Welcome Back</h2>
+      <p style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Log in to access your cart, checkout, and orders.</p>
+    </div>
+
+    <form action="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="POST">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">Password</label>
+        {{ form.password }}
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">
+          <i class="fa-solid fa-right-to-bracket"></i> Log In
+        </button>
+      </div>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--color-text-muted);">
+      Don't have an account yet? 
+      <a href="{% url 'register' %}" style="color: var(--color-primary); font-weight: 700;">Create one here</a>
+    </div>
+  </div>
+{% endblock %}

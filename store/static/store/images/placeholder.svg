@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#F1F5F9"/>
+  <rect x="200" y="180" width="200" height="200" rx="16" fill="#E2E8F0"/>
+  <path d="M260 260C260 248.954 268.954 240 280 240H320C331.046 240 340 248.954 340 260V300C340 311.046 331.046 320 320 320H280C268.954 320 260 311.046 260 300V260Z" fill="#94A3B8"/>
+  <circle cx="300" cy="270" r="16" fill="#64748B"/>
+  <path d="M270 310L290 285L305 300L315 290L330 310H270Z" fill="#64748B"/>
+  <text x="300" y="420" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="600" fill="#64748B" text-anchor="middle">Bazaar Product Image</text>
+</svg>
